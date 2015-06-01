@@ -37,6 +37,7 @@
         "node": "*"
     },
     "dependencies": {
+        "i-splitdiv": "itags/i-splitdiv",
         "itags.core": "itags/core"
     },
     "devDependencies": {
