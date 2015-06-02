@@ -6,27 +6,65 @@
 /* will define which itag will be css-shadowed                             */
 /* ======================================================================= */
 itag-css {
-    i-tag: i-yourname;  /* set the property-value to the proper itag */
+    i-tag: i-splitdiv#threesections;  /* set the property-value to the proper itag */
 }
 /* ======================================================================= */
 /* ======================================================================= */
 /* ======================================================================= */
 
-
-/* ================================= */
-/* set invisiblity when not rendered */
-/* ================================= */
-i-yourname:not(.itag-rendered) {
-    /* don't set visibility to hidden --> you cannot set a focus on those items */
-    opacity: 0 !important;
-    position: absolute !important;
-    left: -9999px !important;
-    top: -9999px !important;
-    z-index: -1;
+i-splitdiv[resizable2="true"] >div >div.resize-handle.second {
+    display: block;
 }
 
-i-yourname:not(.itag-rendered) * {
-    opacity: 0 !important;
+i-splitdiv[is="threesections"].itag-rendered:not(.i-resizing) >div >div[section="third"]:not(.suppress-trans) {
+    -moz-transition: width 0.5s, height 0.5s;
+    -o-transition: width 0.5s, height 0.5s;
+    -webkit-transition: width 0.5s, height 0.5s;
+    transition: width 0.5s, height 0.5s;
 }
-/* ================================= */
 
+i-splitdiv[resizable2="true"].resize-dashed >div >div[section="second"] {
+    border-bottom: dashed 2px #666;
+}
+
+i-splitdiv[resizable2="true"].resize-dashed >div >div[section="third"] {
+    border-top: dashed 2px #666;
+}
+
+i-splitdiv[resizable2="true"].resize-dotted >div >div[section="second"] {
+    border-bottom: dotted 2px #666;
+}
+
+i-splitdiv[resizable2="true"].resize-dotted >div >div[section="third"] {
+    border-top: dotted 2px #666;
+}
+
+i-splitdiv[resizable2="true"][horizontal="true"].resize-dashed >div >div[section="second"] {
+    border-right: dashed 2px #666;
+    border-bottom: none;
+}
+
+i-splitdiv[resizable2="true"][horizontal="true"].resize-dashed >div >div[section="third"] {
+    border-left: dashed 2px #666;
+    border-top: none;
+}
+
+i-splitdiv[resizable2="true"][horizontal="true"].resize-dotted >div >div[section="second"] {
+    border-right: dotted 2px #666;
+    border-bottom: none;
+}
+
+i-splitdiv[resizable2="true"][horizontal="true"].resize-dotted >div >div[section="third"] {
+    border-left: dotted 2px #666;
+    border-top: none;
+}
+
+i-splitdiv[resizable2="true"].resize-light >div >div[section="second"] {
+    border-right-color: #EEE;
+    border-bottom-color: #EEE;
+}
+
+i-splitdiv[resizable2="true"].resize-light >div >div[section="third"] {
+    border-left-color: #EEE;
+    border-top-color: #EEE;
+}

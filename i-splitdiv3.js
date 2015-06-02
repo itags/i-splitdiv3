@@ -5,7 +5,7 @@ module.exports = function (window) {
 
     require('itags.core')(window);
 
-    var pseudoName = 'threedivs', // <-- define your own pseudo-name here
+    var pseudoName = 'threesections', // <-- define your own pseudo-name here
         superClassName = 'i-splitdiv', // <-- define the itag-name of the superClass here
         itagName = superClassName+'#'+pseudoName, // <-- define the itag-name of the superClass here
         DOCUMENT = window.document,
@@ -14,28 +14,79 @@ module.exports = function (window) {
 
     if (!window.ITAGS[itagName]) {
 
-        ISuperClass = require(superClassName)(window);
+        ISuperClass = require('i-splitdiv')(window);  // <-- define the itag-name of the superClass here NOT by variable, for browserify wouldn't load it
 
         Itag = ISuperClass.pseudoClass(pseudoName, {
             attrs: {
-            },
-
-            init: function() {
-                var element = this,
-                    designNode = element.getItagContainer();
-
-                // when initializing: make sure NOT to overrule model-properties that already
-                // might have been defined when modeldata was boundend. Therefore, use `defineWhenUndefined`
-                // element.defineWhenUndefined('someprop', somevalue); // sets element.model.someprop = somevalue; when not defined yet
-
+                divider2: 'string',
+                'divider2-min': 'string',
+                'divider2-max': 'string',
+                resizable2: 'boolean'
             },
 
             render: function() {
-                // set the content:
-                // element.setHTML('');
+                var element = this,
+                    designNode, section3, container, divider, node;
+                element.$superProp('render');
+                designNode = element.getItagContainer();
+                section3 = designNode.getAll('>section')[2];
+                container = element.getElement('>div');
+                if (section3) {
+                    section3.setAttr('section', 'third', true);
+                    node = container.append('<div section="third">'+section3.getOuterHTML(null, true)+'</div>');
+                    element.setData('_section3', node);
+                     // add the divider2:
+                    divider = container.addSystemElement('<div class="resize-handle second"></div>');
+                    divider.setData('_section', 3);
+                    divider.setData('_reverse', true);
+                    divider.setData('_borderNode', node);
+                    element.setData('_divider2', divider);
+                }
             },
 
             sync: function() {
+                var element = this,
+                    model = element.model,
+                    section1 = element.getData('_section1'),
+                    section2 = element.getData('_section2'),
+                    section3 = element.getData('_section3'),
+                    divider2Node = element.getData('_divider2'),
+                    divider2 = model.divider2,
+                    size, removeSize, value, indent;
+                element.$superProp('sync');
+                if (section1 && section2 && section3) {
+                    if (model.horizontal) {
+                        size = 'width';
+                        removeSize = 'height';
+                        indent = 'right';
+                    }
+                    else {
+                        size = 'height';
+                        removeSize = 'width';
+                        indent = 'bottom';
+                    }
+                    value = model['divider2-min'];
+                    if (value) {
+                        section3.setInlineStyle('min-'+size, value);
+                    }
+                    else {
+                        section3.removeInlineStyle('min-'+size);
+                    }
+                    value = model['divider2-max'];
+                    if (value) {
+                        section3.setInlineStyle('max-'+size, value);
+                    }
+                    else {
+                        section3.removeInlineStyle('max-'+size);
+                    }
+                    section3.removeInlineStyle('min-'+removeSize);
+                    section3.removeInlineStyle('max-'+removeSize);
+                    section3.removeInlineStyle(removeSize);
+                    value = divider2;
+                    section3.setInlineStyle(size, value);
+                    // divider2Node.setInlineStyle(indent, (element[size] - section1[size] - section2[size] - Math.round((divider2Node[size])/2))+'px');
+                    divider2Node.setInlineStyle(indent, (section3[size] - Math.round(divider2Node[size]/2))+'px');
+                }
             },
 
             destroy: function() {
