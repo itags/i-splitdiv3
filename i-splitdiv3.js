@@ -30,13 +30,13 @@ module.exports = function (window) {
                 element.$superProp('render');
                 designNode = element.getItagContainer();
                 section3 = designNode.getAll('>section')[2];
-                container = element.getElement('>div');
+                container = element.getElement('>section');
                 if (section3) {
                     section3.setAttr('section', 'third', true);
-                    node = container.append('<div section="third">'+section3.getOuterHTML(null, true)+'</div>');
+                    node = container.append('<section container="third">'+section3.getOuterHTML(null, true)+'</section>');
                     element.setData('_section3', node);
                      // add the divider2:
-                    divider = container.addSystemElement('<div class="resize-handle second"></div>');
+                    divider = container.addSystemElement('<section class="resize-handle second"></section>');
                     divider.setData('_section', 3);
                     divider.setData('_reverse', true);
                     divider.setData('_borderNode', node);
